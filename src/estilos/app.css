@@ -1,0 +1,62 @@
+/* Estilos da aplicação */
+
+/* Container principal */
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Estilos da barra de navegação */
+.navbar {
+  background-color: #03223F; /* Cor de fundo da navegação */
+  padding: 20px;
+  width: 200px;
+  position: relative;
+  border-top-right-radius: 20px; /* Adicionando bordas arredondadas */
+  border-bottom-right-radius: 20px;
+}
+
+/* Lista de itens de navegação */
+.nav-menu {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Estilos dos itens de navegação */
+.nav-item {
+  margin-bottom: 10px;
+}
+
+/* Estilos dos links de navegação */
+.nav-link {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+  transition: background-color 0.3s ease; /* Adicionando transição suave */
+}
+
+/* Estilos dos links de navegação ao passar o mouse */
+.nav-link:hover {
+  background-color: #1E415F; /* Cor de fundo ao passar o mouse */
+}
+
+/* Conteúdo principal */
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Títulos */
+.title {
+  color: white;
+}
+
+/* Link de login */
+.login-link {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 999;
+}

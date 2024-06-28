@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #010D23;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  border-radius: 23px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  width: 245px;
+  margin-bottom: 5px;
+}
+
+.title {
+  color: #FFFFFF;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 20px;
+  padding-left: 40px; /* Acomoda o espaço para o ícone */
+}
+
+.input {
+  width: 100%; /* Faz o input ocupar toda a largura disponível */
+  padding: 10px;
+  background: transparent; /* Remove o fundo da caixa de texto */
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7); /* Adiciona um risco na parte inferior */
+  color: #FFFFFF;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.iconemail,
+.iconpassword {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  width: 20px; /* Define o tamanho do ícone */
+}
+
+.sign-in-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #038BBB;
+  border: none;
+  border-radius: 5px;
+  color: #000000;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px; /* Tamanho do texto do botão */
+}
+
+.google-sign-in {
+  margin: 20px 0;
+}
+
+.google-sign-in img {
+  width: 20px; /* Define o tamanho do ícone do Google */
+  cursor: pointer;
+}
+
+.register-prompt {
+  color: #FFFFFF;
+}
+
+.register-link {
+  color: #E19F41;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 600px) {
+  .login-box {
+    width: 90%; /* Ajusta a largura do box para 90% da tela em dispositivos menores */
+    padding: 20px; /* Reduz o padding */
+  }
+
+  .logo {
+    width: 180px; /* Ajusta a largura do logo */
+  }
+
+  .input {
+    padding: 10px; /* Ajusta o padding dos inputs */
+  }
+
+  .sign-in-button {
+    padding: 8px; /* Ajusta o padding do botão */
+  }
+}

@@ -1,0 +1,24 @@
+/* Estilos para o componente de cadastro */
+.body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #010D23;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  border-radius: 23px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Outros estilos aqui */
