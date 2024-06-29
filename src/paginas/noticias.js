@@ -11,7 +11,8 @@ const Noticias = () => {
         const response = await axios.get('https://newsapi.org/v2/everything', {
           params: {
             q: 'inteligência artificial',
-            apiKey: 'adefb2b75dd2463b82c7611c86c09b74',
+            // adefb2b75dd2463b82c7611c86c09b74
+            apiKey: process.env.REACT_APP_NEWS_API_KEY, // Usando variável de ambiente
             language: 'pt',
             sortBy: 'publishedAt',
           },
