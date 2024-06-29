@@ -7,6 +7,8 @@ const steps = [
   { question: 'Qual é o seu email?', key: 'email', section: 'dadosPessoais' },
   { question: 'Qual é o seu telefone?', key: 'telefone', section: 'dadosPessoais' },
   { question: 'Qual é a sua cidade?', key: 'cidade', section: 'dadosPessoais' },
+  { question: 'Qual é o seu bairro?', key: 'bairro', section: 'dadosPessoais' },
+  { question: 'Qual é o seu Linkedin?', key: 'linkedin', section: 'dadosPessoais' },
   { question: 'Qual é a sua data de nascimento?', key: 'dataNascimento', section: 'dadosPessoais' },
   { question: 'Descreva seu objetivo profissional.', key: 'descricao', section: 'objetivoProfissional' },
   { question: 'Qual é o seu curso?', key: 'curso', section: 'academica' },
@@ -52,13 +54,12 @@ const Chat = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
-    // Saudação inicial
     const greeting = getGreeting();
     setMessages([{ type: 'bot', text: greeting }]);
     setTimeout(() => {
       setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: steps[currentStep].question }]);
       setIsTyping(true);
-    }, 2000); // Delay of 2 seconds (2000 milliseconds)
+    }, 2000);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -67,11 +68,10 @@ const Chat = () => {
       const step = steps[currentStep];
       setIsTyping(true);
 
-      // Simular o atraso de 2 segundos antes de exibir a pergunta
       setTimeout(() => {
         setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: step.question }]);
         setIsTyping(false);
-      }, 2000); // Delay of 2 seconds (2000 milliseconds)
+      }, 2000);
     } else if (currentStep === steps.length) {
       setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: 'Obrigado por fornecer todas as informações! Clique no botão abaixo para baixar seu currículo.' }]);
     }
@@ -108,22 +108,25 @@ const Chat = () => {
 
   const generatePDF = () => {
     const doc = new jsPDF();
+    const nomePessoa = curriculoData.dadosPessoais.cliente || 'Currículo';
     doc.setFont('Helvetica');
     doc.setFontSize(20);
-    doc.text('Currículo', 105, 10, null, null, 'center');
+    doc.text(nomePessoa, 105, 10, null, null, 'center');
 
     doc.setFontSize(14);
-    let yOffset = 30; // Initial y offset for text positioning
+    let yOffset = 30;
 
     const addSection = (title, content) => {
       doc.setFontSize(16);
+      doc.setFont('Helvetica', 'bold');
       doc.text(title, 10, yOffset);
-      yOffset += 10; // Increment y offset for spacing
+      doc.setFont('Helvetica', 'normal');
       doc.setFontSize(12);
+      yOffset += 10;
       const splitContent = doc.splitTextToSize(content || '', doc.internal.pageSize.width - 20);
       doc.text(splitContent, 10, yOffset);
-      yOffset += splitContent.length * (doc.internal.getLineHeight() / doc.internal.scaleFactor); // Calculate the height of text added
-      yOffset += 10; // Add some padding after each section
+      yOffset += splitContent.length * (doc.internal.getLineHeight() / doc.internal.scaleFactor);
+      yOffset += 10;
     };
 
     addSection('Dados Pessoais', Object.entries(curriculoData.dadosPessoais).map(([key, value]) => `${key}: ${value}`).join('\n'));
