@@ -3,6 +3,7 @@ import { jsPDF } from 'jspdf';
 import '../estilos/chat.css';
 
 const steps = [
+  { question: 'Tudo bem com você?', key: 'cliente', section: 'resposta' },
   { question: 'Qual é o seu email?', key: 'email', section: 'dadosPessoais' },
   { question: 'Qual é o seu telefone?', key: 'telefone', section: 'dadosPessoais' },
   { question: 'Qual é a sua cidade?', key: 'cidade', section: 'dadosPessoais' },
@@ -24,11 +25,23 @@ const steps = [
   { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia', section: 'idiomas' },
 ];
 
+const getGreeting = () => {
+  const currentTime = new Date().getHours();
+  if (currentTime < 12) {
+    return 'Bom dia!';
+  } else if (currentTime < 18) {
+    return 'Boa tarde!';
+  } else {
+    return 'Boa noite!';
+  }
+};
+
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [curriculoData, setCurriculoData] = useState({
+    resposta: {},
     dadosPessoais: {},
     objetivoProfissional: {},
     academica: [],
@@ -36,12 +49,30 @@ const Chat = () => {
     certificacoes: [],
     idiomas: []
   });
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
-    if (currentStep < steps.length) {
+    // Saudação inicial
+    const greeting = getGreeting();
+    setMessages([{ type: 'bot', text: greeting }]);
+    setTimeout(() => {
+      setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: steps[currentStep].question }]);
+      setIsTyping(true);
+    }, 2000); // Delay of 2 seconds (2000 milliseconds)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (currentStep > 0 && currentStep < steps.length) {
       const step = steps[currentStep];
-      setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: step.question }]);
-    } else {
+      setIsTyping(true);
+
+      // Simular o atraso de 2 segundos antes de exibir a pergunta
+      setTimeout(() => {
+        setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: step.question }]);
+        setIsTyping(false);
+      }, 2000); // Delay of 2 seconds (2000 milliseconds)
+    } else if (currentStep === steps.length) {
       setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: 'Obrigado por fornecer todas as informações! Clique no botão abaixo para baixar seu currículo.' }]);
     }
   }, [currentStep]);
@@ -50,14 +81,14 @@ const Chat = () => {
     if (input.trim()) {
       const newMessage = { type: 'user', text: input };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-      
+
       const step = steps[currentStep];
       const newData = { ...curriculoData };
-      
+
       if (['experiencia', 'academica', 'certificacoes', 'idiomas'].includes(step.section)) {
         const sectionArray = newData[step.section];
         const index = sectionArray.length - 1;
-        
+
         if (sectionArray[index] && !sectionArray[index][step.key]) {
           sectionArray[index][step.key] = input;
         } else {
@@ -80,7 +111,7 @@ const Chat = () => {
     doc.setFont('Helvetica');
     doc.setFontSize(20);
     doc.text('Currículo', 105, 10, null, null, 'center');
-    
+
     doc.setFontSize(14);
     let yOffset = 30; // Initial y offset for text positioning
 
@@ -115,6 +146,15 @@ const Chat = () => {
               {message.text}
             </div>
           ))}
+          {isTyping && (
+            <div className="message bot-message">
+              <span className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+          )}
           {currentStep >= steps.length && (
             <div className="message bot-message">
               <button onClick={generatePDF} className="download-link">

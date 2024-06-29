@@ -12,10 +12,10 @@
   
   .chat-box {
     width: 90%;
-    max-width: 600px;
+    max-width: 582px;
     background: rgba(255, 255, 255, 0.1);
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 40px;
   }
   
   .messages {
@@ -56,3 +56,65 @@
     margin-left: 10px;
   }
   
+
+.typing-indicator {
+  display: inline-block;
+  position: relative;
+  width: 10px;
+  height: 10px;
+}
+.typing-indicator span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #555;
+  margin-right: 5px;
+  animation: typing-bounce 1s infinite ease-in-out;
+}
+@keyframes typing-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.typing-indicator {
+  display: inline-block;
+  position: relative;
+  width: 30px; /* Largura total das bolinhas (3 bolinhas de 10px + 2 espaços de 5px) */
+  height: 10px; /* Altura das bolinhas */
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 10px; /* Tamanho das bolinhas */
+  height: 10px; /* Tamanho das bolinhas */
+  border-radius: 50%;
+  background-color: #555;
+  margin-right: 5px; /* Espaçamento entre as bolinhas */
+  animation: typing-bounce 1.5s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.5s; /* Atraso para a segunda bolinha levantar */
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 1s; /* Atraso para a terceira bolinha levantar */
+}
+
+@keyframes typing-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
