@@ -129,9 +129,18 @@ const Chat = () => {
       yOffset += 10;
     };
 
+    const formatAcademica = (academica) => {
+      return academica.map((a) => (
+        `Graduação: ${a.curso}\n` +
+        `Instituição: ${a.instituicao}\n` +
+        `Período: ${a.periodo}\n` +
+        `Semestre: ${a.faseAtual}\n`
+      )).join('\n\n');
+    };
+
     addSection('Dados Pessoais', Object.entries(curriculoData.dadosPessoais).map(([key, value]) => `${key}: ${value}`).join('\n'));
     addSection('Objetivo Profissional', curriculoData.objetivoProfissional.descricao || '');
-    addSection('Formação Acadêmica', curriculoData.academica.map((a) => `${a.curso} - ${a.instituicao} (${a.periodo})`).join('\n'));
+    addSection('Formação Acadêmica', formatAcademica(curriculoData.academica));
     addSection('Experiência', curriculoData.experiencia.map((e) => `${e.nome} - ${e.cargo}\n${e.funcoes ? e.funcoes.join(', ') : ''}`).join('\n'));
     addSection('Certificações', curriculoData.certificacoes.map((c) => `${c.nome} - ${c.curso} (${c.instituicao})`).join('\n'));
     addSection('Idiomas', curriculoData.idiomas.map((i) => `${i.lingua}: ${i.fluencia}`).join('\n'));
