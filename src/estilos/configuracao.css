@@ -1,0 +1,18 @@
+/* Estilos para a página de configuração */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Outros estilos específicos para a página de configuração */
+  
