@@ -1,18 +1,41 @@
-/* Estilos para a página de configuração */
+.configuracao-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  text-align: center;
+}
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  
-  .title {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Outros estilos específicos para a página de configuração */
-  
+.title {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.info-section {
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.section-title {
+  font-size: 24px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.section-content {
+  font-size: 18px;
+  color: #777;
+  line-height: 1.5;
+}
+
+.section-content a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.section-content a:hover {
+  text-decoration: underline;
+}

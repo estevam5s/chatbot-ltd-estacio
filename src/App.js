@@ -21,7 +21,7 @@ function App() {
               <Link to="/noticias" className="nav-link">Notícias</Link>
             </li>
             <li className="nav-item">
-              <Link to="/configuracao" className="nav-link">Configuração</Link>
+              <Link to="/configuracao" className="nav-link">Drive Estácio</Link>
             </li>
             <li className="nav-item">
               <Link to="/creditos" className="nav-link">Créditos</Link>
