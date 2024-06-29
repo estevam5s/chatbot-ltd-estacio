@@ -82,10 +82,11 @@
 }
 
 .typing-indicator {
-  display: inline-block;
-  position: relative;
-  width: 30px; /* Largura total das bolinhas (3 bolinhas de 10px + 2 espaços de 5px) */
-  height: 10px; /* Altura das bolinhas */
+  display: flex;
+  justify-content: center; /* Centraliza as bolinhas horizontalmente */
+  align-items: center; /* Centraliza as bolinhas verticalmente */
+  width: 50px; /* Ajuste conforme necessário para acomodar a largura total das bolinhas */
+  height: 20px; /* Altura suficiente para o movimento das bolinhas */
 }
 
 .typing-indicator span {
@@ -94,7 +95,7 @@
   height: 10px; /* Tamanho das bolinhas */
   border-radius: 50%;
   background-color: #555;
-  margin-right: 5px; /* Espaçamento entre as bolinhas */
+  margin: 0 2.5px; /* Espaçamento entre as bolinhas */
   animation: typing-bounce 1.5s infinite ease-in-out;
 }
 
@@ -103,11 +104,11 @@
 }
 
 .typing-indicator span:nth-child(2) {
-  animation-delay: 0.5s; /* Atraso para a segunda bolinha levantar */
+  animation-delay: 0.3s; /* Atraso para a segunda bolinha levantar */
 }
 
 .typing-indicator span:nth-child(3) {
-  animation-delay: 1s; /* Atraso para a terceira bolinha levantar */
+  animation-delay: 0.6s; /* Atraso para a terceira bolinha levantar */
 }
 
 @keyframes typing-bounce {
