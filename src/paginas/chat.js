@@ -35,7 +35,7 @@ const getGreeting = () => {
   } else if (currentTime < 18) {
     return 'Boa tarde! Como está sendo o seu dia';
   } else {
-    return 'Boa noite! Como foi o seu dia';
+    return 'Boa noite!';
   }
 };
 
@@ -121,11 +121,21 @@ const Chat = () => {
       doc.setFontSize(16);
       doc.setFont('Helvetica', 'bold');
       doc.text(title, 10, yOffset);
+      const textWidth = doc.getTextWidth(title);
+      doc.setDrawColor(0, 0, 0); // Preto
+      doc.line(10, yOffset + 2, 10 + textWidth, yOffset + 2); // Sublinhado
       doc.setFont('Helvetica', 'normal');
       doc.setFontSize(12);
       yOffset += 10;
       const splitContent = doc.splitTextToSize(content || '', doc.internal.pageSize.width - 20);
-      doc.text(splitContent, 10, yOffset);
+      splitContent.forEach((line, index) => {
+        if (line.includes('@') || line.includes('linkedin.com')) {
+          doc.setTextColor(0, 0, 255); // Azul para links e emails
+        } else {
+          doc.setTextColor(0, 0, 0); // Preto para o restante
+        }
+        doc.text(line, 10, yOffset + (index * (doc.internal.getLineHeight() / doc.internal.scaleFactor)));
+      });
       yOffset += splitContent.length * (doc.internal.getLineHeight() / doc.internal.scaleFactor);
       yOffset += 10;
     };
