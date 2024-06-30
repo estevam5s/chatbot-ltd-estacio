@@ -24,8 +24,8 @@ const steps = [
   { question: 'Qual é o nome da empresa em que trabalha ou já trabalhou?', key: 'empresa', section: 'experiencia' },
   { question: 'Qual era o cargo ocupado ou que ocupa atualmente?', key: 'trabalho', section: 'experiencia' },
   { question: 'Quanto tempo você ficou trabalhando ou ainda trabalha?', key: 'duracao', section: 'experiencia' },
-  { question: 'Descreva uma função que você desenpenha ou que já desempenhou.', key: 'descricao', section: 'experiencia',},
-  { question: 'Descreva uma outra função.', key: 'Sdescricao', section: 'experiencia',},
+  { question: 'Descreva uma função que você desenpenha ou que já desempenhou.', key: 'descricao', section: 'experiencia' },
+  { question: 'Descreva uma outra função.', key: 'Sdescricao', section: 'experiencia' },
   { question: 'Agora falaremos sobre as suas certificações, podemos começar?', key: 'resposta', section: 'resposta' },
   { question: 'Qual é o nome do seu certificado?', key: 'nome', section: 'certificacoes' },
   { question: 'Qual é o curso relacionado ao certificado?', key: 'curso', section: 'certificacoes' },
@@ -35,7 +35,6 @@ const steps = [
   { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia', section: 'idiomas' },
   { question: 'Possui outro Idioma? Qual outro idioma você fala?', key: 'lingua2', section: 'idiomas' },
   { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia2', section: 'idiomas' },
-  
 ];
 
 const getGreeting = () => {
@@ -45,7 +44,7 @@ const getGreeting = () => {
   } else if (currentTime < 18) {
     return 'Boa tarde! Como está sendo o seu dia';
   } else {
-    return 'Boa noite!';
+    return 'Boa noite! Como foi o seu dia';
   }
 };
 
@@ -139,35 +138,52 @@ const Chat = () => {
       yOffset += 10;
       const splitContent = doc.splitTextToSize(content || '', doc.internal.pageSize.width - 20);
       splitContent.forEach((line, index) => {
-        if (line.includes('@') || line.includes('linkedin.com')) {
+        const parts = line.split(': ');
+        if (parts.length === 2 && (parts[0].toLowerCase().includes('e-mail') || parts[0].toLowerCase().includes('linkedin'))) {
+          doc.text(parts[0] + ': ', 10, yOffset);
           doc.setTextColor(0, 0, 255); // Azul para links e emails
-        } else {
+          doc.text(parts[1].trim(), 10 + doc.getTextWidth(parts[0] + ': '), yOffset);
           doc.setTextColor(0, 0, 0); // Preto para o restante
+        } else {
+          doc.text(line, 10, yOffset);
         }
-        doc.text(line, 10, yOffset + (index * (doc.internal.getLineHeight() / doc.internal.scaleFactor)));
+        yOffset += doc.internal.getLineHeight() / doc.internal.scaleFactor;
       });
-      yOffset += splitContent.length * (doc.internal.getLineHeight() / doc.internal.scaleFactor);
       yOffset += 10;
     };
 
     const formatAcademica = (academica) => {
-      return academica.map((a) => (
-        `Graduação: ${a.curso}\n` +
-        `Instituição: ${a.instituicao}\n` +
-        `Status: ${a.statusAtual}\n` +
-        `Período: ${a.periodo}\n` +
-        `Semestre: ${a.faseAtual}\n`
-      )).join('\n\n');
+      return academica.map((item, index) => {
+        return `Curso: ${item.curso}\n` +
+        `Instituição: ${item.instituicao}\n` +
+        `Total de semestres: ${item.periodo}\n` +
+        `Status do curso: ${item.statusAtual}\n` +
+        `Fase atual: ${item.faseAtual}`;
+      }).join('\n\n');
     };
 
     const formatExperiencia = (experiencia) => {
-      return experiencia.map((e) => (
-        `Empresa: ${e.empresa}\n` +
-        `Trabalho: ${e.trabalho}\n` +
-        `Duração: ${e.duracao}\n` +
-        `Descrição: ${e.descricao}\n` +
-        `Descrição: ${e.Sdescricao}\n`
-      )).join('\n\n');
+      return experiencia.map((item, index) => {
+        return `Empresa: ${item.empresa}\n` +
+        `Cargo: ${item.trabalho}\n` +
+        `Duração: ${item.duracao}\n` +
+        `Função: ${item.descricao}\n` +
+        `Outra função: ${item.Sdescricao}`;
+      }).join('\n\n');
+    };
+
+    // eslint-disable-next-line no-unused-vars
+    const formatCertificacoes = (certificacoes) => {
+      return certificacoes.map((item, index) => {
+        return `Certificado: ${item.nome}\nCurso: ${item.curso}\nInstituição: ${item.instituicao}`;
+      }).join('\n\n');
+    };
+
+    // eslint-disable-next-line no-unused-vars
+    const formatIdiomas = (idiomas) => {
+      return idiomas.map((item, index) => {
+        return `Idioma: ${item.lingua}\nFluência: ${item.fluencia}\nOutro Idioma: ${item.lingua2}\nFluência no segundo idioma: ${item.fluencia2}`;
+      }).join('\n\n');
     };
 
     addSection('Dados Pessoais', Object.entries(curriculoData.dadosPessoais).filter(([key]) => key !== 'cliente').map(([key, value]) => `${key}: ${value}`).join('\n'));
@@ -176,8 +192,9 @@ const Chat = () => {
     addSection('Experiência', formatExperiencia(curriculoData.experiencia));
     addSection('Certificações', curriculoData.certificacoes.map((c) => `${c.nome} - ${c.curso} (${c.instituicao})`).join('\n'));
     addSection('Idiomas', curriculoData.idiomas.map((i) => `${i.lingua}: ${i.fluencia}\n${i.lingua2}: ${i.fluencia2}`).join('\n'));
-
     doc.save('curriculo.pdf');
+
+    doc.save(`${nomePessoa}.pdf`);
   };
 
   return (
