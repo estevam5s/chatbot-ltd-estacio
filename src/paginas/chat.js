@@ -3,29 +3,33 @@ import { jsPDF } from 'jspdf';
 import '../estilos/chat.css';
 
 const steps = [
-  { question: 'Qual é o seu nome?', key: 'cliente', section: 'dadosPessoais' },
   { question: 'Tudo bem com você?', key: 'resposta', section: 'resposta' },
+  { question: 'Qual é o seu nome?', key: 'cliente', section: 'dadosPessoais' },
   { question: 'Qual é o seu email?', key: 'email', section: 'dadosPessoais' },
   { question: 'Qual é o seu telefone?', key: 'telefone', section: 'dadosPessoais' },
   { question: 'Qual é a sua cidade?', key: 'cidade', section: 'dadosPessoais' },
   { question: 'Qual é o seu bairro?', key: 'bairro', section: 'dadosPessoais' },
   { question: 'Qual é o seu Linkedin?', key: 'linkedin', section: 'dadosPessoais' },
-  { question: 'Qual é a sua data de nascimento?', key: 'dataNascimento', section: 'dadosPessoais' },
+  { question: 'Qual é a sua data de nascimento?', key: 'Nascimento', section: 'dadosPessoais' },
   { question: 'Descreva seu objetivo profissional.', key: 'descricao', section: 'objetivoProfissional' },
   { question: 'Qual é o seu curso?', key: 'curso', section: 'academica' },
   { question: 'Qual é a instituição de ensino?', key: 'instituicao', section: 'academica' },
-  { question: 'Qual é o período do curso?', key: 'periodo', section: 'academica' },
+  { question: 'Quantos semestres tem o seu curso?', key: 'periodo', section: 'academica' },
   { question: 'Qual é o status atual do curso?', key: 'statusAtual', section: 'academica' },
   { question: 'Qual é a fase atual do curso?', key: 'faseAtual', section: 'academica' },
   { question: 'Qual é o nome da empresa em que trabalhou?', key: 'empresa', section: 'experiencia' },
   { question: 'Qual era o cargo ocupado?', key: 'trabalho', section: 'experiencia' },
-  { question: 'Qual foi a duração do trabalho?', key: 'duracao', section: 'experiencia' },
+  { question: 'Quanto tempo você ficou trabalhando?', key: 'duracao', section: 'experiencia' },
   { question: 'Descreva uma função que você desempenhou.', key: 'descricao', section: 'experiencia', subkey: 'descricoes' },
+  { question: 'Descreva uma outra função que você desempenhou.', key: 'descricao2', section: 'experiencia', subkey: 'descricoes' },
   { question: 'Qual é o nome do seu certificado?', key: 'nome', section: 'certificacoes' },
   { question: 'Qual é o curso relacionado ao certificado?', key: 'curso', section: 'certificacoes' },
   { question: 'Qual é a instituição emissora do certificado?', key: 'instituicao', section: 'certificacoes' },
   { question: 'Qual idioma você fala?', key: 'lingua', section: 'idiomas' },
   { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia', section: 'idiomas' },
+  { question: 'Possui outro Idioma? Qual outro idioma você fala?', key: 'lingua2', section: 'idiomas' },
+  { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia2', section: 'idiomas' },
+  
 ];
 
 const getGreeting = () => {
@@ -144,6 +148,7 @@ const Chat = () => {
       return academica.map((a) => (
         `Graduação: ${a.curso}\n` +
         `Instituição: ${a.instituicao}\n` +
+        `status: ${a.statusAtual}\n` +
         `Período: ${a.periodo}\n` +
         `Semestre: ${a.faseAtual}\n`
       )).join('\n\n');
@@ -154,16 +159,17 @@ const Chat = () => {
         `Empresa: ${e.empresa}\n` +
         `Trabalho: ${e.trabalho}\n` +
         `Duração: ${e.duracao}\n` +
-        `Descrição: ${e.descricoes ? e.descricoes.join(', ') : ''}\n`
+        `Descrição: ${e.descricao}\n`
+        `Descrição: ${e.descricao2}\n`
       )).join('\n\n');
     };
 
-    addSection('Dados Pessoais', Object.entries(curriculoData.dadosPessoais).map(([key, value]) => `${key}: ${value}`).join('\n'));
+    addSection('Dados Pessoais', Object.entries(curriculoData.dadosPessoais).filter(([key]) => key !== 'cliente').map(([key, value]) => `${key}: ${value}`).join('\n'));
     addSection('Objetivo Profissional', curriculoData.objetivoProfissional.descricao || '');
     addSection('Formação Acadêmica', formatAcademica(curriculoData.academica));
     addSection('Experiência', formatExperiencia(curriculoData.experiencia));
     addSection('Certificações', curriculoData.certificacoes.map((c) => `${c.nome} - ${c.curso} (${c.instituicao})`).join('\n'));
-    addSection('Idiomas', curriculoData.idiomas.map((i) => `${i.lingua}: ${i.fluencia}`).join('\n'));
+    addSection('Idiomas', curriculoData.idiomas.map((i) => `${i.lingua}: ${i.fluencia}\n${i.lingua2}: ${i.fluencia2}`).join('\n'));
 
     doc.save('curriculo.pdf');
   };
