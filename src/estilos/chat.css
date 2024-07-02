@@ -37,6 +37,7 @@
   color: #0A5CB8;
   padding-left: 27px;
   text-align: left;
+  max-width: 30ch;
 }
 
 .input-container {
@@ -45,12 +46,12 @@
 }
 
 .chat-input {
-  flex-grow: 1;
+  margin-left: 30px;
+  width: 90vw;
   padding: 10px;
   border-radius: 5px;
   border: 2px solid #dededef6;
   background: transparent;
-
 }
 
 .send-button {
