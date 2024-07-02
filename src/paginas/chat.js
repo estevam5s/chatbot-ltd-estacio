@@ -155,21 +155,21 @@ const Chat = () => {
       doc.setFontSize(12);
       yOffset += 10;
 
-      const formattedContent = content.map(item => {
-        return Object.entries(item).map(([key, value]) => {
-          const isEmailOrLinkedin = (key.toLowerCase().includes('e-mail') || key.toLowerCase().includes('linkedin'));
-          const textColor = isEmailOrLinkedin ? [0, 0, 255] : [0, 0, 0]; // Azul para links e emails, preto para o restante
-          return { key, value, textColor };
-        });
-      });
-
-      formattedContent.forEach(item => {
-        item.forEach(({ key, value, textColor }) => {
-          doc.setTextColor(...textColor);
-          doc.text(`${key}: `, 10, yOffset);
-          const valueX = 10 + doc.getTextWidth(`${key}: `);
-          doc.setTextColor(0, 0, 0); // Voltar para preto para o valor
-          doc.text(value, valueX, yOffset);
+      content.forEach(item => {
+        Object.entries(item).forEach(([key, value]) => {
+          const isEmail = (key.toLowerCase() === 'e-mail');
+          const isLinkedin = (key.toLowerCase() === 'linkedin');
+          const keyText = `${key}: `;
+          const valueText = isEmail ? value : isLinkedin ? value : `${value}`;
+          const keyColor = isEmail || isLinkedin ? [0, 0, 0] : [0, 0, 0]; // Preto para tudo
+          const valueColor = isEmail ? [0, 0, 255] : isLinkedin ? [0, 0, 255] : [0, 0, 0]; // Azul para e-mail e LinkedIn, preto para o restante
+          
+          doc.setTextColor(...keyColor);
+          doc.text(keyText, 10, yOffset);
+          const keyWidth = doc.getTextWidth(keyText);
+          
+          doc.setTextColor(...valueColor);
+          doc.text(valueText, 10 + keyWidth, yOffset);
           yOffset += doc.internal.getLineHeight() / doc.internal.scaleFactor;
         });
         yOffset += 5; // Espaço entre os itens
