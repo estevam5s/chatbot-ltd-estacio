@@ -137,21 +137,22 @@ const Chat = () => {
     const doc = new jsPDF();
     const nomePessoa = curriculoData.dadosPessoais.cliente || 'Currículo';
     doc.setFont('Helvetica');
-    doc.setFontSize(18); // Reduzindo o tamanho da fonte para 18
-    doc.text(nomePessoa, 105, 10, null, null, 'center');
+    doc.setFontSize(16); // Reduzindo ainda mais o tamanho da fonte para 16
+    const nomeYOffset = 20; // Ajustando o offset vertical para o nome
+    doc.text(nomePessoa, 105, nomeYOffset, null, null, 'center'); // Movendo um pouco mais para baixo
 
-    doc.setFontSize(12); // Reduzindo o tamanho da fonte para 12 para o conteúdo
-    let yOffset = 30;
+    doc.setFontSize(10); // Reduzindo o tamanho da fonte para 10 para o conteúdo
+    let yOffset = 40; // Ajustando o offset inicial vertical para o conteúdo
 
     const addSection = (title, content) => {
-      doc.setFontSize(14); // Ajustando o tamanho da fonte para os títulos das seções
+      doc.setFontSize(12); // Ajustando o tamanho da fonte para os títulos das seções
       doc.setFont('Helvetica', 'bold');
       doc.text(title, 20, yOffset); // Movendo um pouco mais à direita (alterei para 20)
       const textWidth = doc.getTextWidth(title);
       doc.setDrawColor(0, 0, 0); // Preto
       doc.line(20, yOffset + 2, 20 + textWidth, yOffset + 2); // Sublinhado
       doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(12); // Ajustando novamente o tamanho da fonte para o conteúdo
+      doc.setFontSize(10); // Ajustando novamente o tamanho da fonte para o conteúdo
       yOffset += 10;
 
       content.forEach(item => {
@@ -171,12 +172,12 @@ const Chat = () => {
           doc.text(valueText, 20 + keyWidth, yOffset); // Movendo um pouco mais à direita (alterei para 20)
           yOffset += doc.internal.getLineHeight() / doc.internal.scaleFactor;
         });
-        yOffset += 5; // Espaço entre os itens
+        yOffset += 3; // Espaço entre os itens
       });
 
       yOffset += 10; // Espaço após a seção
     };
-    
+
     addSection('Dados Pessoais', [curriculoData.dadosPessoais]);
     addSection('Objetivo Profissional', [curriculoData.objetivoProfissional]);
     addSection('Formação Acadêmica', curriculoData.academica);
