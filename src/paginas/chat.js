@@ -135,59 +135,84 @@ const Chat = () => {
 
   const generatePDF = () => {
     const doc = new jsPDF();
-    const nomePessoa = curriculoData.dadosPessoais.cliente || 'Currículo';
+    const nomePessoa = curriculoData.dadosPessoais.Nome || 'Currículo';
     doc.setFont('Helvetica');
-    doc.setFontSize(16); // Reduzindo ainda mais o tamanho da fonte para 16
-    const nomeYOffset = 20; // Ajustando o offset vertical para o nome
-    doc.text(nomePessoa, 105, nomeYOffset, null, null, 'center'); // Movendo um pouco mais para baixo
-
-    doc.setFontSize(10); // Reduzindo o tamanho da fonte para 10 para o conteúdo
-    let yOffset = 40; // Ajustando o offset inicial vertical para o conteúdo
-
+    doc.setFontSize(16);
+    const nomeYOffset = 20;
+    doc.text(nomePessoa, 105, nomeYOffset, null, null, 'center');
+  
+    doc.setFontSize(10);
+    let yOffset = 40;
+  
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 10;
+  
     const addSection = (title, content) => {
-      doc.setFontSize(12); // Ajustando o tamanho da fonte para os títulos das seções
+      if (yOffset + 20 > pageHeight - margin) {
+        doc.addPage();
+        yOffset = margin;
+      }
+      doc.setFontSize(12);
       doc.setFont('Helvetica', 'bold');
-      doc.text(title, 20, yOffset); // Movendo um pouco mais à direita (alterei para 20)
+      doc.text(title, 20, yOffset);
       const textWidth = doc.getTextWidth(title);
-      doc.setDrawColor(0, 0, 0); // Preto
-      doc.line(20, yOffset + 2, 20 + textWidth, yOffset + 2); // Sublinhado
+      doc.setDrawColor(0, 0, 0);
+      doc.line(20, yOffset + 2, 20 + textWidth, yOffset + 2);
       doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(10); // Ajustando novamente o tamanho da fonte para o conteúdo
+      doc.setFontSize(10);
       yOffset += 10;
-
+  
       content.forEach(item => {
         Object.entries(item).forEach(([key, value]) => {
+          if (yOffset + 10 > pageHeight - margin) {
+            doc.addPage();
+            yOffset = margin;
+          }
+  
           const isEmail = (key.toLowerCase() === 'e-mail');
           const isLinkedin = (key.toLowerCase() === 'linkedin');
-          const keyText = `${key}: `;
-          const valueText = isEmail ? value : isLinkedin ? value : `${value}`;
-          const keyColor = isEmail || isLinkedin ? [0, 0, 0] : [0, 0, 0]; // Preto para tudo
-          const valueColor = isEmail ? [0, 0, 255] : isLinkedin ? [0, 0, 255] : [0, 0, 0]; // Azul para e-mail e LinkedIn, preto para o restante
+          const displayKey = !['nome'].includes(key.toLowerCase());
+          const valueText = isEmail || isLinkedin ? value : `${value}`;
+          const keyColor = isEmail || isLinkedin ? [0, 0, 0] : [0, 0, 0];
+          const valueColor = isEmail ? [0, 0, 255] : isLinkedin ? [0, 0, 255] : [0, 0, 0];
+  
+          if (displayKey) {
+            const keyText = `${key}: `;
+            doc.setTextColor(...keyColor);
+            doc.text(keyText, 20, yOffset);
+            const keyWidth = doc.getTextWidth(keyText);
+  
+            doc.setTextColor(...valueColor);
+            doc.text(valueText, 20 + keyWidth, yOffset);
+          } else {
+            doc.setTextColor(...valueColor);
+            doc.text(valueText, 20, yOffset);
+          }
           
-          doc.setTextColor(...keyColor);
-          doc.text(keyText, 20, yOffset); // Movendo um pouco mais à direita (alterei para 20)
-          const keyWidth = doc.getTextWidth(keyText);
-          
-          doc.setTextColor(...valueColor);
-          doc.text(valueText, 20 + keyWidth, yOffset); // Movendo um pouco mais à direita (alterei para 20)
           yOffset += doc.internal.getLineHeight() / doc.internal.scaleFactor;
         });
-        yOffset += 3; // Espaço entre os itens
+        yOffset += 3;
       });
-
-      yOffset += 10; // Espaço após a seção
+  
+      yOffset += 10;
     };
-
-    addSection('Dados Pessoais', [curriculoData.dadosPessoais]);
+  
+    const displaySections = ['E-mail', 'Telefone', 'Cidade', 'Bairro', 'Linkedin', 'Data de nascimento'];
+  
+    const filteredDadosPessoais = Object.fromEntries(
+      Object.entries(curriculoData.dadosPessoais).filter(([key]) => displaySections.includes(key))
+    );
+  
+    addSection('Dados Pessoais', [filteredDadosPessoais]);
     addSection('Objetivo Profissional', [curriculoData.objetivoProfissional]);
     addSection('Formação Acadêmica', curriculoData.academica);
     addSection('Experiência Profissional', curriculoData.experiencia);
     addSection('Certificações', curriculoData.certificacoes);
     addSection('Idiomas', [curriculoData.idiomas]);
-
+  
     doc.save(`${nomePessoa}_curriculo.pdf`);
   };
-
+  
   // eslint-disable-next-line no-unused-vars
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
