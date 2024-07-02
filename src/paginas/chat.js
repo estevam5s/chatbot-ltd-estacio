@@ -20,16 +20,19 @@ const steps = [
   { question: 'Quantos semestres ao todo tem o seu curso?', key: 'periodo', section: 'academica' },
   { question: 'Qual é o status atual do curso?', key: 'statusAtual', section: 'academica' },
   { question: 'Qual é a fase atual do curso?', key: 'faseAtual', section: 'academica' },
+  { question: 'Deseja adicionar outra formação? (sim ou não)', key: 'adicionarAcademica', section: 'academica' },
   { question: 'Vamos falar agora sobre a sua carreira, podemos dar continuidade?', key: 'resposta', section: 'resposta' },
   { question: 'Qual é o nome da empresa em que trabalha ou já trabalhou?', key: 'empresa', section: 'experiencia' },
   { question: 'Qual era o cargo ocupado ou que ocupa atualmente?', key: 'trabalho', section: 'experiencia' },
   { question: 'Quanto tempo você ficou trabalhando ou ainda trabalha?', key: 'duracao', section: 'experiencia' },
-  { question: 'Descreva uma função que você desenpenha ou que já desempenhou.', key: 'descricao', section: 'experiencia' },
+  { question: 'Descreva uma função que você desempenha ou que já desempenhou.', key: 'descricao', section: 'experiencia' },
   { question: 'Descreva uma outra função.', key: 'Sdescricao', section: 'experiencia' },
+  { question: 'Deseja adicionar outra experiência? (sim ou não)', key: 'adicionarExperiencia', section: 'experiencia' },
   { question: 'Agora falaremos sobre as suas certificações, podemos começar?', key: 'resposta', section: 'resposta' },
   { question: 'Qual é o nome do seu certificado?', key: 'nome', section: 'certificacoes' },
   { question: 'Qual é o curso relacionado ao certificado?', key: 'curso', section: 'certificacoes' },
   { question: 'Qual é a instituição emissora do certificado?', key: 'instituicao', section: 'certificacoes' },
+  { question: 'Deseja adicionar outro certificado? (sim ou não)', key: 'adicionarCertificacao', section: 'certificacoes' },
   { question: 'Chegamos no final, podemos dar continuidade?', key: 'resposta', section: 'resposta' },
   { question: 'Qual idioma você fala?', key: 'lingua', section: 'idiomas' },
   { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia', section: 'idiomas' },
@@ -52,6 +55,9 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
+  const [addingMore, setAddingMore] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [currentSection, setCurrentSection] = useState('');
   const [curriculoData, setCurriculoData] = useState({
     resposta: {},
     dadosPessoais: {},
@@ -95,24 +101,36 @@ const Chat = () => {
       const step = steps[currentStep];
       const newData = { ...curriculoData };
 
-      if (['experiencia', 'academica', 'certificacoes', 'idiomas'].includes(step.section)) {
-        const sectionArray = newData[step.section];
-        const index = sectionArray.length - 1;
-
-        if (sectionArray[index] && !sectionArray[index][step.key]) {
-          sectionArray[index][step.key] = input;
+      if (step.key.startsWith('adicionar')) {
+        const section = step.section;
+        if (input.toLowerCase() === 'sim') {
+          const sectionStartStep = steps.findIndex(s => s.section === section && !s.key.startsWith('adicionar'));
+          setCurrentStep(sectionStartStep);
         } else {
-          const newItem = { [step.key]: input };
-          if (step.subkey) newItem[step.subkey] = [input];
-          sectionArray.push(newItem);
+          setCurrentStep(currentStep + 1);
+        }
+      } else if (['experiencia', 'academica', 'certificacoes'].includes(step.section)) {
+        if (!addingMore) {
+          newData[step.section].push({ [step.key]: input });
+          setCurrentSection(step.section);
+        } else {
+          const sectionArray = newData[step.section];
+          sectionArray[sectionArray.length - 1][step.key] = input;
+        }
+        setAddingMore(true);
+        if (steps[currentStep + 1].key.startsWith('adicionar')) {
+          setCurrentStep(currentStep + 1);
+          setAddingMore(false);
+        } else {
+          setCurrentStep(currentStep + 1);
         }
       } else {
         newData[step.section][step.key] = input;
+        setCurrentStep(currentStep + 1);
       }
 
       setCurriculoData(newData);
       setInput('');
-      setCurrentStep(currentStep + 1);
     }
   };
 
@@ -131,70 +149,43 @@ const Chat = () => {
       doc.setFont('Helvetica', 'bold');
       doc.text(title, 10, yOffset);
       const textWidth = doc.getTextWidth(title);
-      doc.setDrawColor(0, 0, 0); // Preto
-      doc.line(10, yOffset + 2, 10 + textWidth, yOffset + 2); // Sublinhado
-      doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(12);
+      doc.setDrawColor(0, 0, 0);
+      doc.setLineWidth(0.5);
+      doc.line(10, yOffset + 2, 10 + textWidth, yOffset + 2);
       yOffset += 10;
-      const splitContent = doc.splitTextToSize(content || '', doc.internal.pageSize.width - 20);
-      splitContent.forEach((line, index) => {
-        const parts = line.split(': ');
-        if (parts.length === 2 && (parts[0].toLowerCase().includes('e-mail') || parts[0].toLowerCase().includes('linkedin'))) {
-          doc.text(parts[0] + ': ', 10, yOffset);
-          doc.setTextColor(0, 0, 255); // Azul para links e emails
-          doc.text(parts[1].trim(), 10 + doc.getTextWidth(parts[0] + ': '), yOffset);
-          doc.setTextColor(0, 0, 0); // Preto para o restante
-        } else {
-          doc.text(line, 10, yOffset);
-        }
-        yOffset += doc.internal.getLineHeight() / doc.internal.scaleFactor;
+
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(14);
+
+      Object.keys(content).forEach((key) => {
+        const text = `${key}: ${content[key]}`;
+        doc.text(text, 10, yOffset);
+        yOffset += 10;
       });
       yOffset += 10;
     };
 
-    const formatAcademica = (academica) => {
-      return academica.map((item, index) => {
-        return `Curso: ${item.curso}\n` +
-        `Instituição: ${item.instituicao}\n` +
-        `Total de semestres: ${item.periodo}\n` +
-        `Status do curso: ${item.statusAtual}\n` +
-        `Fase atual: ${item.faseAtual}`;
-      }).join('\n\n');
+    const addArraySection = (title, contentArray) => {
+      contentArray.forEach((content, index) => {
+        addSection(`${title} ${index + 1}`, content);
+      });
     };
 
-    const formatExperiencia = (experiencia) => {
-      return experiencia.map((item, index) => {
-        return `Empresa: ${item.empresa}\n` +
-        `Cargo: ${item.trabalho}\n` +
-        `Duração: ${item.duracao}\n` +
-        `Função: ${item.descricao}\n` +
-        `Outra função: ${item.Sdescricao}`;
-      }).join('\n\n');
-    };
+    addSection('Dados Pessoais', curriculoData.dadosPessoais);
+    addSection('Objetivo Profissional', curriculoData.objetivoProfissional);
+    addArraySection('Formação Acadêmica', curriculoData.academica);
+    addArraySection('Experiência Profissional', curriculoData.experiencia);
+    addArraySection('Certificações', curriculoData.certificacoes);
+    addSection('Idiomas', curriculoData.idiomas);
 
-    // eslint-disable-next-line no-unused-vars
-    const formatCertificacoes = (certificacoes) => {
-      return certificacoes.map((item, index) => {
-        return `Certificado: ${item.nome}\nCurso: ${item.curso}\nInstituição: ${item.instituicao}`;
-      }).join('\n\n');
-    };
+    doc.save(`${nomePessoa}_curriculo.pdf`);
+  };
 
-    // eslint-disable-next-line no-unused-vars
-    const formatIdiomas = (idiomas) => {
-      return idiomas.map((item, index) => {
-        return `Idioma: ${item.lingua}\nFluência: ${item.fluencia}\nOutro Idioma: ${item.lingua2}\nFluência no segundo idioma: ${item.fluencia2}`;
-      }).join('\n\n');
-    };
-
-    addSection('Dados Pessoais', Object.entries(curriculoData.dadosPessoais).filter(([key]) => key !== 'cliente').map(([key, value]) => `${key}: ${value}`).join('\n'));
-    addSection('Objetivo Profissional', curriculoData.objetivoProfissional.descricao || '');
-    addSection('Formação Acadêmica', formatAcademica(curriculoData.academica));
-    addSection('Experiência', formatExperiencia(curriculoData.experiencia));
-    addSection('Certificações', curriculoData.certificacoes.map((c) => `${c.nome} - ${c.curso} (${c.instituicao})`).join('\n'));
-    addSection('Idiomas', curriculoData.idiomas.map((i) => `${i.lingua}: ${i.fluencia}\n${i.lingua2}: ${i.fluencia2}`).join('\n'));
-    doc.save('curriculo.pdf');
-
-    doc.save(`${nomePessoa}.pdf`);
+  // eslint-disable-next-line no-unused-vars
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
   };
 
   return (

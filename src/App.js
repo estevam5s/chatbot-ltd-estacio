@@ -21,10 +21,13 @@ function App() {
               <Link to="/noticias" className="nav-link">Notícias</Link>
             </li>
             <li className="nav-item">
-              <Link to="/configuracao" className="nav-link">Drive Estácio</Link>
+              <Link to="/configuracao" className="nav-link">Configuração</Link>
             </li>
             <li className="nav-item">
               <Link to="/creditos" className="nav-link">Créditos</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/login" className="nav-link">Login</Link>
             </li>
           </ul>
         </nav>
@@ -38,10 +41,6 @@ function App() {
             <Route path="/noticias" element={<Noticias />} />
             <Route path="/chat" element={<Chat />} />
           </Routes>
-        </div>
-
-        <div className="login-link">
-          <Link to="/login" className="nav-link">Login</Link>
         </div>
       </div>
     </Router>
