@@ -137,21 +137,21 @@ const Chat = () => {
     const doc = new jsPDF();
     const nomePessoa = curriculoData.dadosPessoais.cliente || 'Currículo';
     doc.setFont('Helvetica');
-    doc.setFontSize(20);
+    doc.setFontSize(18); // Reduzindo o tamanho da fonte para 18
     doc.text(nomePessoa, 105, 10, null, null, 'center');
 
-    doc.setFontSize(14);
+    doc.setFontSize(12); // Reduzindo o tamanho da fonte para 12 para o conteúdo
     let yOffset = 30;
 
     const addSection = (title, content) => {
-      doc.setFontSize(16);
+      doc.setFontSize(14); // Ajustando o tamanho da fonte para os títulos das seções
       doc.setFont('Helvetica', 'bold');
-      doc.text(title, 10, yOffset);
+      doc.text(title, 20, yOffset); // Movendo um pouco mais à direita (alterei para 20)
       const textWidth = doc.getTextWidth(title);
       doc.setDrawColor(0, 0, 0); // Preto
-      doc.line(10, yOffset + 2, 10 + textWidth, yOffset + 2); // Sublinhado
+      doc.line(20, yOffset + 2, 20 + textWidth, yOffset + 2); // Sublinhado
       doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(12);
+      doc.setFontSize(12); // Ajustando novamente o tamanho da fonte para o conteúdo
       yOffset += 10;
 
       content.forEach(item => {
@@ -164,11 +164,11 @@ const Chat = () => {
           const valueColor = isEmail ? [0, 0, 255] : isLinkedin ? [0, 0, 255] : [0, 0, 0]; // Azul para e-mail e LinkedIn, preto para o restante
           
           doc.setTextColor(...keyColor);
-          doc.text(keyText, 10, yOffset);
+          doc.text(keyText, 20, yOffset); // Movendo um pouco mais à direita (alterei para 20)
           const keyWidth = doc.getTextWidth(keyText);
           
           doc.setTextColor(...valueColor);
-          doc.text(valueText, 10 + keyWidth, yOffset);
+          doc.text(valueText, 20 + keyWidth, yOffset); // Movendo um pouco mais à direita (alterei para 20)
           yOffset += doc.internal.getLineHeight() / doc.internal.scaleFactor;
         });
         yOffset += 5; // Espaço entre os itens
@@ -176,7 +176,7 @@ const Chat = () => {
 
       yOffset += 10; // Espaço após a seção
     };
-
+    
     addSection('Dados Pessoais', [curriculoData.dadosPessoais]);
     addSection('Objetivo Profissional', [curriculoData.objetivoProfissional]);
     addSection('Formação Acadêmica', curriculoData.academica);
