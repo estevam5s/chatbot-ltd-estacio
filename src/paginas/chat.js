@@ -177,7 +177,6 @@ const Chat = () => {
       yOffset += 10; // Espaço após a seção
     };
 
-
     addSection('Dados Pessoais', [curriculoData.dadosPessoais]);
     addSection('Objetivo Profissional', [curriculoData.objetivoProfissional]);
     addSection('Formação Acadêmica', curriculoData.academica);
