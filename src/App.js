@@ -16,7 +16,7 @@ function App() {
         <nav className="navbar">
           <ul className="nav-menu">
             <li className="nav-item">
-              <Link to="/chat" className="nav-link">Chat CR</Link>
+              <Link to="/chat" className="nav-link">Chat</Link>
             </li>
             <li className="nav-item">
               <Link to="/noticias" className="nav-link">Notícias</Link>
