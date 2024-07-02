@@ -4,7 +4,7 @@ import '../estilos/chat.css';
 
 const steps = [
   { question: 'Tudo bem com você?', key: 'resposta', section: 'resposta' },
-  { question: 'Qual é o seu nome?', key: 'cliente', section: 'dadosPessoais' },
+  { question: 'Qual é o seu nome?', key: 'Cliente', section: 'dadosPessoais' },
   { question: 'Qual é o seu melhor E-mail?', key: 'E-mail', section: 'dadosPessoais' },
   { question: 'Qual é o seu número de Telefone?', key: 'Telefone', section: 'dadosPessoais' },
   { question: 'Qual é a sua cidade?', key: 'Cidade', section: 'dadosPessoais' },
@@ -12,27 +12,26 @@ const steps = [
   { question: 'Qual é o seu Linkedin?', key: 'Linkedin', section: 'dadosPessoais' },
   { question: 'Qual é a sua data de nascimento?', key: 'Data de nascimento', section: 'dadosPessoais' },
   { question: 'Descreva seu objetivo profissional.', key: 'descricao', section: 'objetivoProfissional' },
-  { question: 'Vamos falar agora sobre a sua formação acadêmica, podemos começar?', key: 'resposta', section: 'resposta' },
-  { question: 'Qual é o seu curso?', key: 'curso', section: 'academica' },
-  { question: 'Qual é a instituição de ensino?', key: 'instituicao', section: 'academica' },
-  { question: 'Quantos semestres ao todo tem o seu curso?', key: 'periodo', section: 'academica' },
-  { question: 'Qual é o status atual do curso?', key: 'statusAtual', section: 'academica' },
-  { question: 'Qual é a fase atual do curso?', key: 'faseAtual', section: 'academica' },
+  { question: 'Qual é o nome do seu curso?', key: 'Curso', section: 'academica' },
+  { question: 'Qual é a instituição de ensino?', key: 'Instituicao', section: 'academica' },
+  { question: 'Quantos semestres ao todo tem o seu curso?', key: 'Periodo', section: 'academica' },
+  { question: 'Qual é o status atual do curso?', key: 'Status', section: 'academica' },
+  { question: 'Qual é a fase atual do curso?', key: 'Fase atual', section: 'academica' },
   { question: 'Deseja adicionar outra formação? (sim ou não)', key: 'adicionarAcademica', section: 'academica' },
-  { question: 'Qual é o nome da empresa em que trabalha ou já trabalhou?', key: 'empresa', section: 'experiencia' },
-  { question: 'Qual era o cargo ocupado ou que ocupa atualmente?', key: 'trabalho', section: 'experiencia' },
-  { question: 'Quanto tempo você ficou trabalhando ou ainda trabalha?', key: 'duracao', section: 'experiencia' },
-  { question: 'Descreva uma função que você desempenha ou que já desempenhou.', key: 'descricao', section: 'experiencia' },
-  { question: 'Descreva uma outra função.', key: 'Sdescricao', section: 'experiencia' },
+  { question: 'Qual é o nome da empresa em que trabalha ou já trabalhou?', key: 'Empresa', section: 'experiencia' },
+  { question: 'Qual era o cargo ocupado ou que ocupa atualmente?', key: 'Cargo', section: 'experiencia' },
+  { question: 'Quanto tempo você ficou trabalhando ou ainda trabalha?', key: 'Duracao', section: 'experiencia' },
+  { question: 'Descreva uma função que você desempenha ou que já desempenhou.', key: 'Descricao', section: 'experiencia' },
+  { question: 'Descreva uma outra função.', key: 'Descricao', section: 'experiencia' },
   { question: 'Deseja adicionar outra experiência? (sim ou não)', key: 'adicionarExperiencia', section: 'experiencia' },
   { question: 'Qual é o nome do seu certificado?', key: 'nome', section: 'certificacoes' },
-  { question: 'Qual é o curso relacionado ao certificado?', key: 'curso', section: 'certificacoes' },
-  { question: 'Qual é a instituição emissora do certificado?', key: 'instituicao', section: 'certificacoes' },
+  { question: 'Qual é o curso relacionado ao certificado?', key: 'Curso', section: 'certificacoes' },
+  { question: 'Qual é a instituição emissora do certificado?', key: 'Instituicao', section: 'certificacoes' },
   { question: 'Deseja adicionar outro certificado? (sim ou não)', key: 'adicionarCertificacao', section: 'certificacoes' },
-  { question: 'Qual idioma você fala?', key: 'lingua', section: 'idiomas' },
-  { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia', section: 'idiomas' },
-  { question: 'Possui outro Idioma? Qual outro idioma você fala?', key: 'lingua2', section: 'idiomas' },
-  { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia2', section: 'idiomas' },
+  { question: 'Qual idioma você fala?', key: 'Lingua', section: 'idiomas' },
+  { question: 'Qual é o seu nível de fluência no idioma?', key: 'Fluencia', section: 'idiomas' },
+  { question: 'Qual outro idioma você fala?', key: 'Lingua', section: 'idiomas' },
+  { question: 'Qual é o seu nível de fluência no idioma?', key: 'Fluencia', section: 'idiomas' },
 ];
 
 const getGreeting = () => {
@@ -177,6 +176,7 @@ const Chat = () => {
 
       yOffset += 10; // Espaço após a seção
     };
+
 
     addSection('Dados Pessoais', [curriculoData.dadosPessoais]);
     addSection('Objetivo Profissional', [curriculoData.objetivoProfissional]);
