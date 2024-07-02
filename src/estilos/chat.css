@@ -16,21 +16,19 @@
   background: rgb(237, 237, 237, 0.3) !important;
   border: 2px solid #CCCCCC;
   padding: 20px;
-  padding-left: 0px;
   border-radius: 15px;
-
 }
 
 .messages {
   height: 400px;
   overflow-y: auto;
   margin-bottom: 20px;
+  padding-right: 10px;
 }
 
 .message {
   margin: 10px;
   text-align: end;
- 
 }
 
 .bot-message {
@@ -43,11 +41,13 @@
 .input-container {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  padding: 10px 0;
 }
 
 .chat-input {
-  margin-left: 30px;
-  width: 90vw;
+  flex: 1;
   padding: 10px;
   border-radius: 5px;
   border: 2px solid #dededef6;
@@ -62,4 +62,32 @@
   cursor: pointer;
   color: rgb(255, 255, 255);
   margin-left: 10px;
+}
+
+.download-button-container {
+  margin-top: 20px;
+}
+
+.download-button {
+  padding: 10px 20px;
+  background-color: #1D9CFE;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+}
+
+.typing-indicator .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 4px;
+  background-color: #ccc;
+  border-radius: 50%;
+  animation: typing 1s infinite ease-in-out;
+}
+
+@keyframes typing {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }

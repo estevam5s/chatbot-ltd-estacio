@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { jsPDF } from 'jspdf';
 import '../estilos/chat.css';
 
 const steps = [
   { question: 'Tudo bem com você?', key: 'resposta', section: 'resposta' },
-  { question: 'Vamos começar agora as perguntas para o seu novo currículo, você está de acordo?', key: 'resposta', section: 'resposta' },
   { question: 'Qual é o seu nome?', key: 'cliente', section: 'dadosPessoais' },
   { question: 'Qual é o seu melhor E-mail?', key: 'E-mail', section: 'dadosPessoais' },
   { question: 'Qual é o seu número de Telefone?', key: 'Telefone', section: 'dadosPessoais' },
@@ -12,7 +11,6 @@ const steps = [
   { question: 'Qual é o seu bairro?', key: 'Bairro', section: 'dadosPessoais' },
   { question: 'Qual é o seu Linkedin?', key: 'Linkedin', section: 'dadosPessoais' },
   { question: 'Qual é a sua data de nascimento?', key: 'Data de nascimento', section: 'dadosPessoais' },
-  { question: 'Vamos falar agora sobre o seu Objetivo profissional, podemos começar?', key: 'resposta', section: 'resposta' },
   { question: 'Descreva seu objetivo profissional.', key: 'descricao', section: 'objetivoProfissional' },
   { question: 'Vamos falar agora sobre a sua formação acadêmica, podemos começar?', key: 'resposta', section: 'resposta' },
   { question: 'Qual é o seu curso?', key: 'curso', section: 'academica' },
@@ -21,19 +19,16 @@ const steps = [
   { question: 'Qual é o status atual do curso?', key: 'statusAtual', section: 'academica' },
   { question: 'Qual é a fase atual do curso?', key: 'faseAtual', section: 'academica' },
   { question: 'Deseja adicionar outra formação? (sim ou não)', key: 'adicionarAcademica', section: 'academica' },
-  { question: 'Vamos falar agora sobre a sua carreira, podemos dar continuidade?', key: 'resposta', section: 'resposta' },
   { question: 'Qual é o nome da empresa em que trabalha ou já trabalhou?', key: 'empresa', section: 'experiencia' },
   { question: 'Qual era o cargo ocupado ou que ocupa atualmente?', key: 'trabalho', section: 'experiencia' },
   { question: 'Quanto tempo você ficou trabalhando ou ainda trabalha?', key: 'duracao', section: 'experiencia' },
   { question: 'Descreva uma função que você desempenha ou que já desempenhou.', key: 'descricao', section: 'experiencia' },
   { question: 'Descreva uma outra função.', key: 'Sdescricao', section: 'experiencia' },
   { question: 'Deseja adicionar outra experiência? (sim ou não)', key: 'adicionarExperiencia', section: 'experiencia' },
-  { question: 'Agora falaremos sobre as suas certificações, podemos começar?', key: 'resposta', section: 'resposta' },
   { question: 'Qual é o nome do seu certificado?', key: 'nome', section: 'certificacoes' },
   { question: 'Qual é o curso relacionado ao certificado?', key: 'curso', section: 'certificacoes' },
   { question: 'Qual é a instituição emissora do certificado?', key: 'instituicao', section: 'certificacoes' },
   { question: 'Deseja adicionar outro certificado? (sim ou não)', key: 'adicionarCertificacao', section: 'certificacoes' },
-  { question: 'Chegamos no final, podemos dar continuidade?', key: 'resposta', section: 'resposta' },
   { question: 'Qual idioma você fala?', key: 'lingua', section: 'idiomas' },
   { question: 'Qual é o seu nível de fluência no idioma?', key: 'fluencia', section: 'idiomas' },
   { question: 'Possui outro Idioma? Qual outro idioma você fala?', key: 'lingua2', section: 'idiomas' },
@@ -68,6 +63,7 @@ const Chat = () => {
     idiomas: []
   });
   const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const greeting = getGreeting();
@@ -92,6 +88,10 @@ const Chat = () => {
       setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: 'Obrigado por fornecer todas as informações! Clique no botão abaixo para baixar seu currículo.' }]);
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const sendMessage = () => {
     if (input.trim()) {
@@ -149,34 +149,41 @@ const Chat = () => {
       doc.setFont('Helvetica', 'bold');
       doc.text(title, 10, yOffset);
       const textWidth = doc.getTextWidth(title);
-      doc.setDrawColor(0, 0, 0);
-      doc.setLineWidth(0.5);
-      doc.line(10, yOffset + 2, 10 + textWidth, yOffset + 2);
-      yOffset += 10;
-
+      doc.setDrawColor(0, 0, 0); // Preto
+      doc.line(10, yOffset + 2, 10 + textWidth, yOffset + 2); // Sublinhado
       doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(14);
-
-      Object.keys(content).forEach((key) => {
-        const text = `${key}: ${content[key]}`;
-        doc.text(text, 10, yOffset);
-        yOffset += 10;
-      });
+      doc.setFontSize(12);
       yOffset += 10;
-    };
 
-    const addArraySection = (title, contentArray) => {
-      contentArray.forEach((content, index) => {
-        addSection(`${title} ${index + 1}`, content);
+      const formattedContent = content.map(item => {
+        return Object.entries(item).map(([key, value]) => {
+          const isEmailOrLinkedin = (key.toLowerCase().includes('e-mail') || key.toLowerCase().includes('linkedin'));
+          const textColor = isEmailOrLinkedin ? [0, 0, 255] : [0, 0, 0]; // Azul para links e emails, preto para o restante
+          return { key, value, textColor };
+        });
       });
+
+      formattedContent.forEach(item => {
+        item.forEach(({ key, value, textColor }) => {
+          doc.setTextColor(...textColor);
+          doc.text(`${key}: `, 10, yOffset);
+          const valueX = 10 + doc.getTextWidth(`${key}: `);
+          doc.setTextColor(0, 0, 0); // Voltar para preto para o valor
+          doc.text(value, valueX, yOffset);
+          yOffset += doc.internal.getLineHeight() / doc.internal.scaleFactor;
+        });
+        yOffset += 5; // Espaço entre os itens
+      });
+
+      yOffset += 10; // Espaço após a seção
     };
 
-    addSection('Dados Pessoais', curriculoData.dadosPessoais);
-    addSection('Objetivo Profissional', curriculoData.objetivoProfissional);
-    addArraySection('Formação Acadêmica', curriculoData.academica);
-    addArraySection('Experiência Profissional', curriculoData.experiencia);
-    addArraySection('Certificações', curriculoData.certificacoes);
-    addSection('Idiomas', curriculoData.idiomas);
+    addSection('Dados Pessoais', [curriculoData.dadosPessoais]);
+    addSection('Objetivo Profissional', [curriculoData.objetivoProfissional]);
+    addSection('Formação Acadêmica', curriculoData.academica);
+    addSection('Experiência Profissional', curriculoData.experiencia);
+    addSection('Certificações', curriculoData.certificacoes);
+    addSection('Idiomas', [curriculoData.idiomas]);
 
     doc.save(`${nomePessoa}_curriculo.pdf`);
   };
