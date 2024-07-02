@@ -4,7 +4,7 @@ import '../estilos/chat.css';
 
 const steps = [
   { question: 'Tudo bem com você?', key: 'resposta', section: 'resposta' },
-  { question: 'Qual é o seu nome?', key: 'Cliente', section: 'dadosPessoais' },
+  { question: 'Qual é o seu nome?', key: 'Nome', section: 'dadosPessoais' },
   { question: 'Qual é o seu melhor E-mail?', key: 'E-mail', section: 'dadosPessoais' },
   { question: 'Qual é o seu número de Telefone?', key: 'Telefone', section: 'dadosPessoais' },
   { question: 'Qual é a sua cidade?', key: 'Cidade', section: 'dadosPessoais' },
