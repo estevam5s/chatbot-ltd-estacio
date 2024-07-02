@@ -6,16 +6,19 @@
   }
   
   .chat-title {
-    margin-bottom: 20px;
-    color: white;
+    margin-bottom: 25px;
+    color: #2174D4;
   }
   
   .chat-box {
-    width: 90%;
+    width: 100%;
     max-width: 600px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(237, 237, 237, 0.3) !important;
+    border: 2px solid #CCCCCC;
     padding: 20px;
-    border-radius: 10px;
+    padding-left: 0px;
+    border-radius: 15px;
+
   }
   
   .messages {
@@ -25,11 +28,15 @@
   }
   
   .message {
-    margin: 10px 0;
+    margin: 10px;
+    text-align: end;
+   
   }
   
   .bot-message {
-    color: #038BBB;
+    color: #0A5CB8;
+    padding-left: 27px;
+    text-align: left;
   }
   
   .input-container {
@@ -40,19 +47,19 @@
   .chat-input {
     flex-grow: 1;
     padding: 10px;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    border: 2px solid #dededef6;
     background: transparent;
-    color: white;
+
   }
   
   .send-button {
     padding: 10px 20px;
-    background-color: #038BBB;
+    background-color: #1D9CFE;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    color: black;
+    color: rgb(255, 255, 255);
     margin-left: 10px;
   }
   

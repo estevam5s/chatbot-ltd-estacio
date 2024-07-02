@@ -26,6 +26,9 @@ function App() {
             <li className="nav-item">
               <Link to="/creditos" className="nav-link">Créditos</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/login" className="nav-link">Login</Link>
+            </li>
           </ul>
         </nav>
 
@@ -38,10 +41,6 @@ function App() {
             <Route path="/noticias" element={<Noticias />} />
             <Route path="/chat" element={<Chat />} />
           </Routes>
-        </div>
-
-        <div className="login-link">
-          <Link to="/login" className="nav-link">Login</Link>
         </div>
       </div>
     </Router>

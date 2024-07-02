@@ -1,9 +1,9 @@
 import React from 'react';
-import '../estilos/cadastro.css';  // Caminho para o arquivo CSS
-import logo from '../img/logocr.png';  // Caminho para a imagem do logo
-import iconEmail from '../img/icongmail.png';  // Caminho para a imagem do ícone de e-mail
-import iconPassword from '../img/iconpassworld.png';  // Caminho para a imagem do ícone de senha
-import iconGoogle from '../img/icongoogle.png';  // Caminho para a imagem do ícone do Google
+import '../estilos/cadastro.css';
+import logo from '../img/logocr.png';
+import iconEmail from '../img/icongmail.png';
+import iconPassword from '../img/iconpassworld.png';
+import iconGoogle from '../img/icongoogle.png';  
 import { Link } from 'react-router-dom';
 
 const Cadastro = () => {
