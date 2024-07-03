@@ -9,7 +9,8 @@ const steps = [
   { question: 'Qual é o seu número de Telefone?', key: 'Telefone', section: 'dadosPessoais' },
   { question: 'Qual é a sua cidade?', key: 'Cidade', section: 'dadosPessoais' },
   { question: 'Qual é o seu bairro?', key: 'Bairro', section: 'dadosPessoais' },
-  { question: 'Qual é o seu Linkedin?', key: 'Linkedin', section: 'dadosPessoais' },
+  { question: 'Você tem LinkedIn? (sim ou não)', key: 'hasLinkedin', section: 'dadosPessoais' },
+  { question: 'Qual é o seu Linkedin?', key: 'Linkedin', section: 'dadosPessoais', conditional: true },
   { question: 'Qual é a sua data de nascimento?', key: 'Data de nascimento', section: 'dadosPessoais' },
   { question: 'Descreva seu objetivo profissional.', key: 'descricao', section: 'objetivoProfissional' },
   { question: 'Qual é o nome do seu curso?', key: 'Curso', section: 'academica' },
@@ -50,8 +51,7 @@ const Chat = () => {
   const [input, setInput] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [addingMore, setAddingMore] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [currentSection, setCurrentSection] = useState('');
+  const [skippedSteps, setSkippedSteps] = useState({});
   const [curriculoData, setCurriculoData] = useState({
     resposta: {},
     dadosPessoais: {},
@@ -77,15 +77,19 @@ const Chat = () => {
   useEffect(() => {
     if (currentStep > 0 && currentStep < steps.length) {
       const step = steps[currentStep];
-      setIsTyping(true);
-
-      setTimeout(() => {
-        setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: step.question }]);
-        setIsTyping(false);
-      }, 2000);
+      if (skippedSteps[step.key]) {
+        setCurrentStep(currentStep + 1);
+      } else {
+        setIsTyping(true);
+        setTimeout(() => {
+          setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: step.question }]);
+          setIsTyping(false);
+        }, 2000);
+      }
     } else if (currentStep === steps.length) {
       setMessages((prevMessages) => [...prevMessages, { type: 'bot', text: 'Obrigado por fornecer todas as informações! Clique no botão abaixo para baixar seu currículo.' }]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]);
 
   useEffect(() => {
@@ -111,20 +115,21 @@ const Chat = () => {
       } else if (['experiencia', 'academica', 'certificacoes'].includes(step.section)) {
         if (!addingMore) {
           newData[step.section].push({ [step.key]: input });
-          setCurrentSection(step.section);
+          setAddingMore(true);
         } else {
           const sectionArray = newData[step.section];
           sectionArray[sectionArray.length - 1][step.key] = input;
         }
-        setAddingMore(true);
         if (steps[currentStep + 1].key.startsWith('adicionar')) {
-          setCurrentStep(currentStep + 1);
           setAddingMore(false);
-        } else {
-          setCurrentStep(currentStep + 1);
         }
+        setCurrentStep(currentStep + 1);
       } else {
-        newData[step.section][step.key] = input;
+        if (step.key === 'hasLinkedin' && input.toLowerCase() === 'não') {
+          setSkippedSteps({ ...skippedSteps, 'Linkedin': true });
+        } else {
+          newData[step.section][step.key] = input;
+        }
         setCurrentStep(currentStep + 1);
       }
 
@@ -211,13 +216,6 @@ const Chat = () => {
     addSection('Idiomas', [curriculoData.idiomas]);
   
     doc.save(`${nomePessoa}_curriculo.pdf`);
-  };
-  
-  // eslint-disable-next-line no-unused-vars
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      sendMessage();
-    }
   };
 
   return (
