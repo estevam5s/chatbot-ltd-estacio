@@ -1,18 +1,25 @@
 /* Estilos da aplicação */
 
+html{
+  background-image: url('../img/image\ 72.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 /* Container principal */
 .app-container {
   display: flex;
   flex-direction: column;
   height: auto;
-  background-color: #fafafa;
+
 }
 
 /* Estilos da barra de navegação */
 .navbar {
   background-color: #014BA0; /* Cor de fundo da navegação */
-  width: 100vw;
+  width: 100%;
   height: 60px;
+  opacity: 0.9;
 }
 
 /* Lista de itens de navegação */
@@ -26,7 +33,7 @@
 
 /* Estilos dos itens de navegação */
 .nav-item {
-  padding: 7px 12px;
+  padding: 3px 12px;
 }
 
 /* Estilos dos links de navegação */
@@ -47,7 +54,7 @@
 /* Conteúdo principal */
 .content {
   flex: 1;
-  padding: 20px;
+  padding: 5px;
 }
 
 /* Títulos */
