@@ -1,53 +1,54 @@
 /* eslint-disable no-lone-blocks */
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import Cadastro from './paginas/cadastro';
-import Configuracao from './paginas/configuracao';  // Corrigido: caminho relativo a partir de src
-import Creditos from './paginas/creditos';  // Corrigido: caminho relativo a partir de src
-import Noticias from './paginas/noticias';  // Corrigido: caminho relativo a partir de src
-import Chat from './paginas/chat';  // Corrigido: caminho relativo a partir de src
+import Extra from './paginas/extra';
+import Creditos from './paginas/creditos'; 
+import Noticias from './paginas/noticias'; 
+import Chat from './paginas/chat';  
 import './estilos/app.css';
-{/*import Login from './paginas/login';  // Corrigido: caminho relativo a partir de src*/}  // Corrigido: caminho relativo a partir de src
 
 function App() {
+  const location = useLocation();
+
+  return (
+    <div className="app-container">
+      <nav className="navbar">
+        <ul className="nav-menu">
+          <li className="nav-item">
+            <Link to="/chat" className={`nav-link ${location.pathname === '/chat' ? 'active-press' : ''}`}>Chat</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/noticias" className={`nav-link ${location.pathname === '/noticias' ? 'active-press' : ''}`}>Notícias</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/extra" className={`nav-link ${location.pathname === '/extra' ? 'active-press' : ''}`}>Extra</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/creditos" className={`nav-link ${location.pathname === '/creditos' ? 'active-press' : ''}`}>Créditos</Link>
+          </li>
+        </ul>
+      </nav>
+
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<Navigate to="/chat" />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/extra" element={<Extra />} />
+          <Route path="/creditos" element={<Creditos />} />
+          <Route path="/noticias" element={<Noticias />} />
+          <Route path="/chat" element={<Chat />} />
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
+export default function AppWrapper() {
   return (
     <Router>
-      <div className="app-container">
-        <nav className="navbar">
-          <ul className="nav-menu">
-            <li className="nav-item">
-              <Link to="/chat" className="nav-link">Chat</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/noticias" className="nav-link">Notícias</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/configuracao" className="nav-link">Drive</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/creditos" className="nav-link">Créditos</Link>
-            </li>
-            {/*
-            <li className="nav-item">
-              <Link to="/login" className="nav-link">Login</Link>
-            </li>
-            */}
-          </ul>
-        </nav>
-
-        <div className="content">
-          <Routes>
-            {/*<Route path="/login" element={<Login />} /> Corrigido: caminho da rota */}
-            <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="/configuracao" element={<Configuracao />} />
-            <Route path="/creditos" element={<Creditos />} />
-            <Route path="/noticias" element={<Noticias />} />
-            <Route path="/chat" element={<Chat />} />
-          </Routes>
-        </div>
-      </div>
+      <App />
     </Router>
   );
 }
 
-export default App;

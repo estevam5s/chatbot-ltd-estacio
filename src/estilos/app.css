@@ -1,5 +1,10 @@
 /* Estilos da aplicação */
 
+.active-press{
+  background-color: #136bcfbd; 
+}
+
+
 html{
   background-image: url('../img/image\ 72.png');
   background-size: cover;

@@ -8,9 +8,10 @@
 
 .chat-title {
   margin-bottom: 20px;
-  color: #2174D4;
-  font-weight: 800;
-  font-size: 26px;
+  color: #1466C3;
+  font-weight: 700;
+  font-size: 32px;
+  text-decoration: underline;
 }
 
 .chat-box {

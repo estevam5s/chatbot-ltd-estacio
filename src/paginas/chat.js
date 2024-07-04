@@ -40,9 +40,9 @@ const getGreeting = () => {
   if (currentTime < 12) {
     return 'Bom dia! Espero que o seu dia seja especial';
   } else if (currentTime < 18) {
-    return 'Boa tarde! Como está sendo o seu dia';
+    return 'Boa tarde! Como está sendo o seu dia?';
   } else {
-    return 'Boa noite! Como foi o seu dia';
+    return 'Boa noite! Como foi o seu dia?';
   }
 };
 
@@ -220,7 +220,7 @@ const Chat = () => {
 
   return (
     <div className="chat-container">
-      <h2 className="chat-title">Chat CR</h2>
+      <h2 className="chat-title">Gerador de Currículo!</h2>
       <div className="chat-box">
         <div className="messages">
           {messages.map((message, index) => (
@@ -244,6 +244,7 @@ const Chat = () => {
               </button>
             </div>
           )}
+          <div ref={messagesEndRef}></div>
         </div>
         <div className="input-container">
           <input
